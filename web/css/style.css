@@ -1,0 +1,118 @@
+/* FONT FACE */
+/* Appelle les polices de la page */
+@font-face {
+ font-family: "Mali";
+ src: url("../fonts/Mali-Regular.ttf");
+}
+
+/*GLOBAL */
+/* Balises et class appelés à plusieurs endroits dans la page */
+html
+{
+  height: 100%;
+}
+
+
+body
+{
+  font-family: "Mali", serif;
+  /* background: center / cover no-repeat url("../img/image1.jpg"); */
+  height: 100%;
+
+}
+ h1
+ {
+   margin: 0 auto;
+ }
+
+/* HEADER */
+/* Ce qui concerne le header et la nav */
+header
+{
+
+  background-color: #6d9eed;
+}
+
+nav a
+{
+  margin: 2rem;
+  padding: 1rem 1rem;
+
+  border-radius:10% 40% 50% 70%;
+}
+
+nav a:hover
+{
+  background-color: #ef755f;
+}
+.flexhead
+{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.flexhead > div
+{
+  margin: 0 4rem;
+  justify-content: space-between;
+}
+
+.flexnav
+{
+
+  display: flex;
+  justify-content: space-around;
+
+}
+
+
+
+/* MAIN */
+/* Ce qui concerne le corps du site */
+.container
+{
+  color: #000000;
+  background: center / cover no-repeat url("../img/image1.jpg");
+  height: 100%;
+
+}
+.flextask
+{
+  display: flex;
+
+
+}
+
+.taskstatus
+{
+  margin: 0 1rem;
+  display:flex;
+  flex-direction: column;
+  background-color: #c9e5c3;
+  border-radius:0.4rem;
+  align-items: center;
+  flex-basis: 20%;
+}
+.far {
+	display: block;
+}
+
+.task
+{
+  margin: 1rem auto;
+  background-color: #ffffff;
+  border-radius: 0.5rem;
+  width: 90%;
+  text-align: center;
+}
+
+.taskTitle{
+  display:flex;
+  justify-content: space-between;
+  align-items: flex-start;
+
+
+}
+/* FOOTER */
+/* Ce qui concerne le footer */

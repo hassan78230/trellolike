@@ -1,0 +1,29 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+   {% if app.user %}
+    <section>
+      <h2>Les Equipes</h2>
+      <ul>
+        {% for team in app.user.teams %}
+        <li> <a href="{{ path('teams_show', { 'id': team.id})}}">{{ team.name }}</a> </li>
+        {% endfor %}
+      </ul>
+      <a href="{{ path('teams_new')}}">créer une nouvelle équipe</a>
+    </section>
+    <section>
+      <h2>Les Projets</h2>
+      <ul>
+        {% for team in app.user.teams %}
+          {% for project in team.projects %}
+        <li> <a href="{{ path('projects_show', { 'id': project.id})}}">{{ project.name }}</a> </li>
+        {% endfor %}
+        {% endfor %}
+      </ul>
+      <a href="{{ path('projects_new')}}">créer un nouveau projet</a>
+    </section>
+
+   {% else %}
+    <h1>TRELLO LIKE</h1>
+   {% endif %}
+{% endblock %}

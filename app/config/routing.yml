@@ -1,0 +1,160 @@
+home:
+    path:    /
+    defaults: { _controller: "AppBundle:Default:index" }
+
+users_index:
+    path:     /users
+    defaults: { _controller: "AppBundle:Users:index" }
+    methods:  GET
+
+
+users_show:
+    path:     /{id}/show
+    defaults: { _controller: "AppBundle:Users:show" }
+    methods:  GET
+
+users_new:
+    path:     /new
+    defaults: { _controller: "AppBundle:Users:new" }
+    methods:  [GET, POST]
+
+users_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "AppBundle:Users:edit" }
+    methods:  [GET, POST]
+
+users_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "AppBundle:Users:delete" }
+    methods:  DELETE
+
+login:
+    path:     /login
+    defaults: { _controller: "AppBundle:Users:login" }
+    methods:  [GET, POST]
+
+logout:
+    path: /logout
+
+teams_index:
+    path:     /teams
+    defaults: { _controller: "AppBundle:Teams:index" }
+    methods:  GET
+
+teams_show:
+    path:     /{id}/team/show
+    defaults: { _controller: "AppBundle:Teams:show" }
+    methods:  GET
+
+teams_new:
+    path:     /team/new
+    defaults: { _controller: "AppBundle:Teams:new" }
+    methods:  [GET, POST]
+
+teams_edit:
+    path:     /{id}/team/edit
+    defaults: { _controller: "AppBundle:Teams:edit" }
+    methods:  [GET, POST]
+
+teams_delete:
+    path:     /{id}/team/delete
+    defaults: { _controller: "AppBundle:Teams:delete" }
+    methods:  DELETE
+
+messages_index:
+    path:     /messages
+    defaults: { _controller: "AppBundle:Messages:index" }
+    methods:  GET
+
+messages_show:
+    path:     /messages/{id}/show
+    defaults: { _controller: "AppBundle:Messages:show" }
+    methods:  GET
+
+messages_new:
+    path:     /messages/new
+    defaults: { _controller: "AppBundle:Messages:new" }
+    methods:  [GET, POST]
+
+messages_edit:
+    path:     /messages/{id}/edit
+    defaults: { _controller: "AppBundle:Messages:edit" }
+    methods:  [GET, POST]
+
+messages_delete:
+    path:     /messages/{id}/delete
+    defaults: { _controller: "AppBundle:Messages:delete" }
+    methods:  DELETE
+tags_index:
+    path:     /tag/
+    defaults: { _controller: "AppBundle:Tags:index" }
+    methods:  GET
+
+tags_show:
+    path:     /tag/{id}/show
+    defaults: { _controller: "AppBundle:Tags:show" }
+    methods:  GET
+
+tags_new:
+    path:     /tag/new
+    defaults: { _controller: "AppBundle:Tags:new" }
+    methods:  [GET, POST]
+
+tags_edit:
+    path:     /tag/{id}/edit
+    defaults: { _controller: "AppBundle:Tags:edit" }
+    methods:  [GET, POST]
+
+tags_delete:
+    path:     /tag/{id}/delete
+    defaults: { _controller: "AppBundle:Tags:delete" }
+    methods:  DELETE
+
+projects_index:
+    path:     /project/
+    defaults: { _controller: "AppBundle:Projects:index" }
+    methods:  GET
+
+projects_show:
+    path:     /project/{id}/show
+    defaults: { _controller: "AppBundle:Projects:show" }
+    methods:  GET
+
+projects_new:
+    path:     /project/new
+    defaults: { _controller: "AppBundle:Projects:new" }
+    methods:  [GET, POST]
+
+projects_edit:
+    path:     /project/{id}/edit
+    defaults: { _controller: "AppBundle:Projects:edit" }
+    methods:  [GET, POST]
+
+projects_delete:
+    path:     /project/{id}/delete
+    defaults: { _controller: "AppBundle:Projects:delete" }
+    methods:  DELETE
+tasks_index:
+    path:     /tasks/
+    defaults: { _controller: "AppBundle:Tasks:index" }
+    methods:  GET
+
+tasks_show:
+    path:     /tasks/{id}/show
+    defaults: { _controller: "AppBundle:Tasks:show" }
+    methods:  GET
+
+tasks_new:
+    path:     /tasks/{id}/new/
+    defaults: { _controller: "AppBundle:Tasks:new" }
+    methods:  [GET, POST]
+
+tasks_edit:
+    path:     /tasks/{id}/edit
+    defaults: { _controller: "AppBundle:Tasks:edit" }
+    methods:  [GET, POST]
+
+tasks_delete:
+    path:     /tasks/{id}/delete
+    defaults: { _controller: "AppBundle:Tasks:delete" }
+    methods:  DELETE

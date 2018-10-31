@@ -1,0 +1,24 @@
+teams_index:
+    path:     /teams
+    defaults: { _controller: "AppBundle:Teams:index" }
+    methods:  GET
+
+teams_show:
+    path:     /{id}/team/show
+    defaults: { _controller: "AppBundle:Teams:show" }
+    methods:  GET
+
+teams_new:
+    path:     /team/new
+    defaults: { _controller: "AppBundle:Teams:new" }
+    methods:  [GET, POST]
+
+teams_edit:
+    path:     /{id}/team/edit
+    defaults: { _controller: "AppBundle:Teams:edit" }
+    methods:  [GET, POST]
+
+teams_delete:
+    path:     /{id}/team/delete
+    defaults: { _controller: "AppBundle:Teams:delete" }
+    methods:  DELETE

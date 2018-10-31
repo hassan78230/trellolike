@@ -1,0 +1,72 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+<h1>Users</h1>
+
+<h2>{{ app.user.firstname }} {{ app.user.lastname }}</h2>
+<section class="flextask">
+  <section class="taskstatus">
+    <h2>En cours</h2>
+    {% for task in app.user.taskusers %}
+    {% if task.status == 'wip' %}
+    <div class="task">
+      <div class="taskTitle">
+        <h3>{{ task.title}}</h3><!--
+        --><a href="{{ path('tasks_edit' , {'id': task.id })}}">
+          <i class="far fa-edit"></i>
+
+        </a>
+      </div>
+      {% for user in task.userstask %}
+      <p>{{ user.firstname }}</p>
+      {% endfor %}
+    </div>
+      {% endif %}
+      {% endfor %}
+  </section>
+  <section class="taskstatus">
+    <h2>A faire</h2>
+    {% for task in app.user.taskusers %}
+    {% if task.status == 'todo' %}
+    <div class="task">
+      <div class="taskTitle">
+        <h3>{{ task.title}}</h3><!--
+        --><a href="{{ path('tasks_edit' , {'id': task.id })}}">
+          <i class="far fa-edit"></i>
+
+        </a>
+      </div>
+      {% for user in task.userstask %}
+      <p>{{ user.firstname }}</p>
+      {% endfor %}
+    </div>
+      {% endif %}
+      {% endfor %}
+
+  </section>
+  <section class="taskstatus">
+    <h2>Terminé</h2>
+    {% for task in app.user.taskusers %}
+    {% if task.status == 'done' %}
+    <div class="task">
+      <div class="taskTitle">
+        <h3>{{ task.title}}</h3><!--
+        --><a href="{{ path('tasks_edit' , {'id': task.id })}}">
+          <i class="far fa-edit"></i>
+
+        </a>
+      </div>
+      {% for user in task.userstask %}
+      <p>{{ user.firstname }}</p>
+      {% endfor %}
+    </div>
+      {% endif %}
+      {% endfor %}
+  </section>
+
+</section>
+
+
+
+{% endblock %}

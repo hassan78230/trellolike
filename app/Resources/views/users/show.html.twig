@@ -1,0 +1,73 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+  <h2>Mon Compte</h2>
+
+    <table>
+        <tbody>
+
+            <tr>
+                <th>Prenom</th>
+                <td>{{ user.firstname }}</td>
+            </tr>
+            <tr>
+                <th>nom</th>
+                <td>{{ user.lastname }}</td>
+            </tr>
+            <tr>
+                <th>Email</th>
+                <td>{{ user.email }}</td>
+            </tr>
+            <tr>
+                <th>tags</th>
+                <td>
+                  <ul>
+                    {% for tag in user.tags %}
+                    <li>
+                      {{ tag.name }}
+                    </li>
+                    {% endfor %}
+                  </ul>
+
+                </td>
+            </tr>
+
+
+
+        </tbody>
+    </table>
+
+    <section>
+      <h2>team de {{ user.firstname }}</h2>
+      {% for teams in user.teams %}
+      <a href="{{ path('teams_show',{ 'id': teams.id})}}"> {{ teams.name }}</a>
+
+      <br>
+      {% endfor %}
+    </section>
+    <section>
+      <ul>
+        {% for tasks in user.taskusers %}
+        <li><a href="{{ path('tasks_show',{ 'id': tasks.id})}}">{{ tasks.title }} au status {{ tasks.status}}</a></li>
+        {%endfor %}
+
+      </ul>
+    </section>
+
+    <ul>
+        <li>
+            <a href="{{ path('home') }}">Back to the list</a>
+        </li>
+
+        <li>
+            <a href="{{ path('users_edit', { 'id': user.id }) }}">edit</a>
+        </li>
+
+        <li>
+          {{ form_start(delete_form) }}
+          <input type="submit" value="Delete">
+          {{ form_end(delete_form) }}
+        </li>
+
+    </ul>
+{% endblock %}

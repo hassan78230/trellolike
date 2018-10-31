@@ -1,0 +1,24 @@
+tags_index:
+    path:     /tag/
+    defaults: { _controller: "AppBundle:Tags:index" }
+    methods:  GET
+
+tags_show:
+    path:     /tag/{id}/show
+    defaults: { _controller: "AppBundle:Tags:show" }
+    methods:  GET
+
+tags_new:
+    path:     /tag/new
+    defaults: { _controller: "AppBundle:Tags:new" }
+    methods:  [GET, POST]
+
+tags_edit:
+    path:     /tag/{id}/edit
+    defaults: { _controller: "AppBundle:Tags:edit" }
+    methods:  [GET, POST]
+
+tags_delete:
+    path:     /tag/{id}/delete
+    defaults: { _controller: "AppBundle:Tags:delete" }
+    methods:  DELETE

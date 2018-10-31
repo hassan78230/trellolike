@@ -1,0 +1,511 @@
+<?php
+
+namespace AppBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Security\Core\User\AdvancedUserInterface;
+use AppBundle\Entity\Teams;
+
+
+
+/**
+ * Users
+ *
+ * @ORM\Table(name="users")
+ * @ORM\Entity
+ */
+class Users implements UserInterface, \Serializable
+{
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer", nullable=false)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $id;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="firstName", type="string", length=255, nullable=false)
+     */
+    private $firstname;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="lastName", type="string", length=255, nullable=false)
+     */
+    private $lastname;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="email", type="string", length=255, nullable=false)
+     */
+    private $email;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="password", type="string", length=64, nullable=false)
+     */
+    private $password;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="isActive", type="boolean", nullable=true)
+     */
+    private $isactive;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="token", type="string", length=64, nullable=true)
+     */
+    private $token;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="photo", type="string", length=255, nullable=true)
+     */
+    private $photo;
+
+    /**
+       * @ORM\ManyToMany(targetEntity="Teams", mappedBy="users")
+       */
+  	private $teams;
+
+    /**
+    * @ORM\OneToMany(targetEntity="Messages", mappedBy="sender")
+    */
+   private $sendMessages;
+
+   /**
+      * @ORM\ManyToMany(targetEntity="Messages", mappedBy="receivers")
+      */
+   private $receiveMessages;
+
+   /**
+     * @var \Doctrine\Common\Collections\Collection
+     *
+     * @ORM\ManyToMany(targetEntity="Tags", inversedBy="tagusers")
+     * @ORM\JoinTable(name="users_tags",
+     *      joinColumns={@ORM\JoinColumn(name="users_id", referencedColumnName="id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="tags_id", referencedColumnName="id")}
+     *      )
+     */
+   private $tags;
+
+   /**
+      * @ORM\ManyToMany(targetEntity="Tasks", mappedBy="userstask")
+      */
+   private $taskusers;
+
+    public function __construct()
+    {
+        $this->teams = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->receiveMessages = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->sendMessages = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->tags = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->taskusers = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    public function getSalt()
+    {
+        return null;
+    }
+
+    public function getRoles()
+    {
+          if(empty($this->role)) // si est vide
+          {
+              return array('ROLE_USER'); // rempli avec USER, attention, renvoie un tableau (array)
+          }
+          // return array('ROLE_USER');
+          return array($this->role);
+    }
+
+    public function getUsername()
+    {
+        return $this->email; // ici lui passe l'e-mail car c'est ce qu'on a configuré dans le formulaire, sinon on pourrait lui passer autre chose si configuré différemment
+    }
+
+
+    public function eraseCredentials()
+    {
+    }
+    public function serialize()
+    {
+        return serialize(array( // checker syntaxes des appels de méthodes en haut
+            $this->id,
+            $this->email,
+            $this->password,
+            $this->isactive,
+            // $this->salt
+        ));
+    }
+
+    public function unserialize($serialized)
+    {
+        list ( // checker syntaxes des appels de méthodes en haut
+            $this->id,
+            $this->email,
+            $this->password,
+            $this->isactive,
+            // $this->salt
+        ) = unserialize($serialized, array('allowed_classes' => false));
+    }
+
+    /**
+     * Get id
+     *
+     * @return integer
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set firstname
+     *
+     * @param string $firstname
+     *
+     * @return Users
+     */
+    public function setFirstname($firstname)
+    {
+        $this->firstname = $firstname;
+
+        return $this;
+    }
+
+    /**
+     * Get firstname
+     *
+     * @return string
+     */
+    public function getFirstname()
+    {
+        return $this->firstname;
+    }
+
+    /**
+     * Set lastname
+     *
+     * @param string $lastname
+     *
+     * @return Users
+     */
+    public function setLastname($lastname)
+    {
+        $this->lastname = $lastname;
+
+        return $this;
+    }
+
+    /**
+     * Get lastname
+     *
+     * @return string
+     */
+    public function getLastname()
+    {
+        return $this->lastname;
+    }
+
+    /**
+     * Set email
+     *
+     * @param string $email
+     *
+     * @return Users
+     */
+    public function setEmail($email)
+    {
+        $this->email = $email;
+
+        return $this;
+    }
+
+    /**
+     * Get email
+     *
+     * @return string
+     */
+    public function getEmail()
+    {
+        return $this->email;
+    }
+
+    /**
+     * Set password
+     *
+     * @param string $password
+     *
+     * @return Users
+     */
+    public function setPassword($password)
+    {
+        $this->password = $password;
+
+        return $this;
+    }
+
+    /**
+     * Get password
+     *
+     * @return string
+     */
+    public function getPassword()
+    {
+        return $this->password;
+    }
+
+    /**
+     * Set isactive
+     *
+     * @param boolean $isactive
+     *
+     * @return Users
+     */
+    public function setIsactive($isactive)
+    {
+        $this->isactive = $isactive;
+
+        return $this;
+    }
+
+    /**
+     * Get isactive
+     *
+     * @return boolean
+     */
+    public function getIsactive()
+    {
+        return $this->isactive;
+    }
+
+    /**
+     * Set token
+     *
+     * @param string $token
+     *
+     * @return Users
+     */
+    public function setToken($token)
+    {
+        $this->token = $token;
+
+        return $this;
+    }
+
+    /**
+     * Get token
+     *
+     * @return string
+     */
+    public function getToken()
+    {
+        return $this->token;
+    }
+
+    /**
+     * Set photo
+     *
+     * @param string $photo
+     *
+     * @return Users
+     */
+    public function setPhoto($photo)
+    {
+        $this->photo = $photo;
+
+        return $this;
+    }
+
+    /**
+     * Get photo
+     *
+     * @return string
+     */
+    public function getPhoto()
+    {
+        return $this->photo;
+    }
+
+    /**
+     * Add team
+     *
+     * @param \AppBundle\Entity\Teams $team
+     *
+     * @return Users
+     */
+    public function addTeam(\AppBundle\Entity\Teams $team)
+    {
+        $this->teams[] = $team;
+
+        return $this;
+    }
+
+    /**
+     * Remove team
+     *
+     * @param \AppBundle\Entity\Teams $team
+     */
+    public function removeTeam(\AppBundle\Entity\Teams $team)
+    {
+        $this->teams->removeElement($team);
+    }
+
+    /**
+     * Get teams
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getTeams()
+    {
+        return $this->teams;
+    }
+
+    /**
+     * Add sendMessage
+     *
+     * @param \AppBundle\Entity\Messages $sendMessage
+     *
+     * @return Users
+     */
+    public function addSendMessage(\AppBundle\Entity\Messages $sendMessage)
+    {
+        $this->sendMessages[] = $sendMessage;
+
+        return $this;
+    }
+
+    /**
+     * Remove sendMessage
+     *
+     * @param \AppBundle\Entity\Messages $sendMessage
+     */
+    public function removeSendMessage(\AppBundle\Entity\Messages $sendMessage)
+    {
+        $this->sendMessages->removeElement($sendMessage);
+    }
+
+    /**
+     * Get sendMessages
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getSendMessages()
+    {
+        return $this->sendMessages;
+    }
+
+    /**
+     * Add receiveMessage
+     *
+     * @param \AppBundle\Entity\Messages $receiveMessage
+     *
+     * @return Users
+     */
+    public function addReceiveMessage(\AppBundle\Entity\Messages $receiveMessage)
+    {
+        $this->receiveMessages[] = $receiveMessage;
+
+        return $this;
+    }
+
+    /**
+     * Remove receiveMessage
+     *
+     * @param \AppBundle\Entity\Messages $receiveMessage
+     */
+    public function removeReceiveMessage(\AppBundle\Entity\Messages $receiveMessage)
+    {
+        $this->receiveMessages->removeElement($receiveMessage);
+    }
+
+    /**
+     * Get receiveMessages
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getReceiveMessages()
+    {
+        return $this->receiveMessages;
+    }
+
+    /**
+     * Add tag
+     *
+     * @param \AppBundle\Entity\Tags $tag
+     *
+     * @return Users
+     */
+    public function addTag(\AppBundle\Entity\Tags $tag)
+    {
+        $this->tags[] = $tag;
+
+        return $this;
+    }
+
+    /**
+     * Remove tag
+     *
+     * @param \AppBundle\Entity\Tags $tag
+     */
+    public function removeTag(\AppBundle\Entity\Tags $tag)
+    {
+        $this->tags->removeElement($tag);
+    }
+
+    /**
+     * Get tags
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getTags()
+    {
+        return $this->tags;
+    }
+
+    /**
+     * Add taskuser
+     *
+     * @param \AppBundle\Entity\Tasks $taskuser
+     *
+     * @return Users
+     */
+    public function addTaskuser(\AppBundle\Entity\Tasks $taskuser)
+    {
+        $this->taskusers[] = $taskuser;
+
+        return $this;
+    }
+
+    /**
+     * Remove taskuser
+     *
+     * @param \AppBundle\Entity\Tasks $taskuser
+     */
+    public function removeTaskuser(\AppBundle\Entity\Tasks $taskuser)
+    {
+        $this->taskusers->removeElement($taskuser);
+    }
+
+    /**
+     * Get taskusers
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getTaskusers()
+    {
+        return $this->taskusers;
+    }
+}

@@ -1,0 +1,67 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h2>send Messages list</h2>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Envoyez a</th>
+                <th>Title</th>
+                <th>Text</th>
+                <th>Date</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for message in app.user.sendMessages %}
+            <tr>
+                <td>
+                  <ul>
+                    {% for receiver in message.receivers %}
+                      <li>{{receiver.email}}</li>
+                    {% endfor %}
+                  </ul>
+                </td>
+                <td>{{ message.title }}</td>
+                <td>{{ message.text }}</td>
+                <td>{% if message.date %}{{ message.date|date('Y-m-d H:i:s') }}{% endif %}</td>
+                <td>
+                    <a href="{{ path('messages_show', { 'id': message.id }) }}">show</a>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    <a href="{{ path('messages_new') }}">Create a new message</a>
+
+
+    <h2>receive Messages list</h2>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Envoyez par</th>
+                <th>Title</th>
+                <th>Text</th>
+                <th>Date</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for message in app.user.receiveMessages %}
+            <tr>
+                <td>{{ message.sender.email }}</td>
+                <td>{{ message.title }}</td>
+                <td>{{ message.text }}</td>
+                <td>{% if message.date %}{{ message.date|date('Y-m-d H:i:s') }}{% endif %}</td>
+                <td>
+                    <a href="{{ path('messages_show', { 'id': message.id }) }}">show</a>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+
+{% endblock %}

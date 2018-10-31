@@ -1,0 +1,85 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+
+<h1>{{ project.name }}</h1>
+<section class="flextask">
+  <section class="taskstatus">
+    <h2>En cours</h2>
+    {% for task in project.tasks %}
+    {% if task.status == 'wip' %}
+    <div class="task">
+      <div class="taskTitle">
+        <h3>{{ task.title}}</h3><!--
+        --><a href="{{ path('tasks_edit' , {'id': task.id })}}">
+          <i class="far fa-edit"></i>
+
+        </a>
+      </div>
+      {% for user in task.userstask %}
+      <p>{{ user.firstname }}</p>
+      {% endfor %}
+    </div>
+      {% endif %}
+      {% endfor %}
+  </section>
+  <section class="taskstatus">
+    <h2>A faire</h2>
+    {% for task in project.tasks %}
+    {% if task.status == 'todo' %}
+    <div class="task">
+      <div class="taskTitle">
+        <h3>{{ task.title}}</h3><!--
+        --><a href="{{ path('tasks_edit' , {'id': task.id })}}">
+          <i class="far fa-edit"></i>
+
+        </a>
+      </div>
+      {% for user in task.userstask %}
+      <p>{{ user.firstname }}</p>
+      {% endfor %}
+    </div>
+      {% endif %}
+      {% endfor %}
+
+  </section>
+  <section class="taskstatus">
+    <h2>Terminé</h2>
+    {% for task in project.tasks %}
+    {% if task.status == 'done' %}
+    <div class="task">
+      <div class="taskTitle">
+        <h3>{{ task.title}}</h3><!--
+        --><a href="{{ path('tasks_edit' , {'id': task.id })}}">
+          <i class="far fa-edit"></i>
+
+        </a>
+      </div>
+      {% for user in task.userstask %}
+      <p>{{ user.firstname }}</p>
+      {% endfor %}
+    </div>
+      {% endif %}
+      {% endfor %}
+  </section>
+
+</section>
+<a href="{{ path('tasks_new' , {'id': project.id })}}">ajouter une tache</a>
+
+
+
+<!-- <ul>
+  <li>
+    <a href="{{ path('projects_index') }}">Back to the list</a>
+  </li>
+  <li>
+    <a href="{{ path('projects_edit', { 'id': project.id }) }}">Edit</a>
+  </li>
+  <li>
+    {{ form_start(delete_form) }}
+    <input type="submit" value="Delete">
+    {{ form_end(delete_form) }}
+  </li>
+</ul> --> 
+{% endblock %}

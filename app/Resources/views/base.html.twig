@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="fr">
+    <head>
+        <meta charset="UTF-8" />
+        <title>{% block title %}Trello Like{% endblock %}</title>
+        {% block stylesheets %}{% endblock %}
+
+    		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    		<!-- CSS Vendor -->
+        <link rel="stylesheet" href="{{ asset('css/all.css') }}" />
+    		<link rel="stylesheet" type="text/css" href="{{ asset('css/normalize.css') }}" media="all" />
+    		<!-- CSS Perso -->
+    		<link rel="stylesheet" type="text/css" href="{{ asset('css/base.css') }}" media="screen" />
+    		<link rel="stylesheet" type="text/css" href="{{ asset('css/style.css') }}" media="screen" />
+        <link rel="stylesheet" type="text/css" href="{{ asset('css/animate.css') }}" media="screen" />
+        <script
+			  src="https://code.jquery.com/jquery-3.3.1.min.js"
+			  integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+			  crossorigin="anonymous"></script>
+
+
+
+    </head>
+    <body>
+      <header>
+        <div class="flexhead">
+          <div >
+            <span class="slideInLeft" style="display: block;animation-duration:1s;">
+              <h1>HKWEB</h1>
+              <a href="{{ path('home')}}">
+                <i class="fas fa-home"></i>
+              </a>
+
+            </span>
+
+
+          </div>
+          <div class="">
+            <nav class="flexnav">
+              {% if app.user%}
+              <a href="{{ path('users_show', { 'id': app.user.id})}}">{{ app.user.firstname }}</a>
+              <a href="{{ path('users_index')}}">tableau de bord</a>
+              <a href="{{ path('messages_index')}}">mes messages</a>
+              <a href="{{ path('logout')}}">logout</a>
+
+
+
+              {% else %}
+              <a href="{{ path('login')}}">login</a>
+              <a href="{{ path('users_new')}}">inscrivez-vous</a>
+
+              {% endif %}
+
+            </nav>
+
+          </div>
+
+        </div>
+      </header>
+      <main class="container">
+        {% block body %}{% endblock %}
+        {% block javascripts %}{% endblock %}
+
+      </main>
+      <!-- <footer>
+        <p>Developper par HKWEB Copyright@.</p>
+       </footer> -->
+    </body>
+</html>
