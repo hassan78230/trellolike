@@ -158,3 +158,8 @@ tasks_delete:
     path:     /tasks/{id}/delete
     defaults: { _controller: "AppBundle:Tasks:delete" }
     methods:  DELETE
+
+email_validate:
+    path:     /validate/{token}
+    defaults: { _controller: "AppBundle:Users:validate"}
+    methods: [GET, POST]

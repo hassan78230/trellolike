@@ -13,6 +13,8 @@ use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Validator\Constraints\Regex;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\Length;
+use Symfony\Component\Validator\Constraints\Url;
+use Symfony\Component\Validator\Constraints\Email;
 
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -34,7 +36,7 @@ class UsersType extends AbstractType
         new NotBlank(array('message' => 'veuillez remplir le champs')),
         new Regex(array('pattern' => '/^[a-zA-Z-\'éèàê]+$/',
         'message' => 'veuillez rentrer un nom valide')),
-        new Length(array('max' => 100, // pour pas dépasser limites de la BDD
+        new Length(array('max' => 100,
         'min' => 2,
         'maxMessage' => "Le nom est trop long, < 100 lettres",
         'minMessage' => "Le nom est trop court, > 2 lettres"))
@@ -44,14 +46,19 @@ class UsersType extends AbstractType
         'constraints' => array(
         new NotBlank(array('message' => 'veuillez remplir le champs')),
         new Regex(array('pattern' => '/^[a-zA-Z-\'éèàê]+$/',
-        'message' => 'veuillez rentrer un nom valide')),
-        new Length(array('max' => 100, // pour pas dépasser limites de la BDD
-        'min' => 2,
-        'maxMessage' => "Le nom est trop long, < 100 lettres",
-        'minMessage' => "Le nom est trop court, > 2 lettres"))
+         'message' => 'veuillez rentrer un nom valide')),
+        new Length(array('max' => 100,
+         'min' => 2,
+         'maxMessage' => "Le nom est trop long, < 100 lettres",
+         'minMessage' => "Le nom est trop court, > 2 lettres"))
       )))
       ->add('email', EmailType::class,array('label' => 'email'))
-      ->add('password', PasswordType::class,array('label' => 'Password'))
+      ->add('password', PasswordType::class,array('label' => 'Password',
+        'constraints' => array(
+        new NotBlank(array('message' => 'veuillez remplir le champs')),
+        new Regex(array('pattern' => '/^((?=\S*?[A-Z])(?=\S*?[a-z])(?=\S*?[0-9]).{8,})$/',
+         'message' => 'veuillez rentrer un mot de passe valide'))
+      )))
       ->add('tags', EntityType::class, [  'class' => Tags::class,
         'multiple' => true,
         'expanded' =>true,

@@ -16,6 +16,10 @@ use Symfony\Component\HttpFoundation\Session\Storage\PhpBridgeSessionStorage;
 
 use AppBundle\Form\LoginType;
 
+use \Swift_Mailer;
+use \Swift_Message;
+use Doctrine\ORM\EntityManagerInterface;
+
 
 /**
  * User controller.
@@ -71,7 +75,7 @@ class UsersController extends Controller
      * Creates a new user entity.
      *
      */
-    public function newAction(UserPasswordEncoderInterface $encoder,Request $request)
+    public function newAction(UserPasswordEncoderInterface $encoder,Request $request,Swift_Mailer $mailer)
     {
         $user = new Users();
         $form = $this->createForm('AppBundle\Form\UsersType', $user);
@@ -80,9 +84,27 @@ class UsersController extends Controller
         if ($form->isSubmitted() && $form->isValid()) {
             $hash = $encoder->encodePassword($user , $user->getPassword() );
             $user->setPassword($hash);
+            $user->setIsActive(false);
+            $token = bin2hex(random_bytes(32));
+            $user->setToken($token);
             $em = $this->getDoctrine()->getManager();
             $em->persist($user);
             $em->flush();
+            $message = (new Swift_Message('Validation'))
+          		->setFrom('contact@website.com')
+          		->setTo($user->getEmail())
+          		// ->setBody('<h1> Confirmation </h1><p> coucou </p>', 'text/html'); // pour créer contenu du mail - HTML : on doit mettre du HTML en string. on passe en deuxième paramètre le type du contenu, ici text/html
+          		// // OU pour mettre dedans une view twig dans laquelle on a créé la vue du mail que l'on veut
+          		->setBody(
+              		$this->renderView(
+                          // view à mettre dans app/Resources/views/email/confirm.html.twig
+                          'email/confirm.html.twig',
+                          ['user' => $user] // récupère les données user pour pouvoir afficher dans le mail
+                      ),'text/html' // type du contenu, ici text/html
+              );
+
+          	// envoie le message (utiliser $mailer en nom car on lui passe en parmètre)
+              $mailer->send($message);
 
             return $this->redirectToRoute('users_show', array('id' => $user->getId()));
         }
@@ -91,6 +113,52 @@ class UsersController extends Controller
             'user' => $user,
             'form' => $form->createView(),
         ));
+    }
+    // retour du mail de confirmation
+    public function validateAction($token, Swift_Mailer $mailer)
+    {
+        // récupère infos user en fonction token du user pour lien dans le mail
+            // findOneByToken pour ne sortir qu'un résultat : celui dont le champs "token" a la même valeur que $token, si on avait mis findByToken aurait sorti un tableau, pas pratique à exploiter
+        $user = $this->getDoctrine()->getRepository(Users::class)->findOneByToken($token);
+
+        if($user) { // si on a un user : si variable a une valeur (équivalent de $user == true)
+
+            // passe champs is_active en true pour autoriser accès aux pages du site
+            $user->setIsActive(true);
+
+            // vide le contenu du champs token
+            $user->setToken(NULL);
+
+            // entityManager est ce qui va permettre insertion, par une classe déjà existante dans Doctrine
+            $entityManager = $this->getDoctrine()->getManager();
+
+            // prepare l'insertion
+            $entityManager->persist($user);
+
+            // execute toutes les requetes set du dessus
+            $entityManager->flush();
+
+            // création du mail de confirmation d'inscription
+            $message = (new Swift_Message('Compte validé')) // Objet du mail
+                ->setFrom('contact@website.com') // expediteur, si dans mailtrap on peut mettre nawak
+                ->setTo($user->getEmail()) // destinataire, récup depuis fonction getMail
+                ->setBody( // pour créer contenu du mail - mettre dedans view twig dans laquelle on a créé la vue du mail que l'on veu
+                    $this->renderView(
+                        // view à mettre dans app/Resources/views/email/validate.html.twig
+                        'email/validate.html.twig',
+                        ['user' => $user] // récupère les données user pour pouvoir afficher dans le mail
+                        ), 'text/html' // type du contenu, ici text/html
+                    );
+
+            // envoie le message (utiliser $mailer en nom car on lui passe en parmètre)
+            $mailer->send($message);
+
+            // envoie à la vue home une fois inscription terminée
+            return $this->redirectToRoute('login');
+        } else {
+            // envoie à la vue home si $user a une valeur nulle (équivalent de $user == false)
+            return $this->redirectToRoute('home');
+        }
     }
 
     /**
@@ -102,7 +170,7 @@ class UsersController extends Controller
         $deleteForm = $this->createDeleteForm($user);
 
 
-  
+
         return $this->render('users/show.html.twig', array(
             'user' => $user,
             'delete_form' => $deleteForm->createView(),

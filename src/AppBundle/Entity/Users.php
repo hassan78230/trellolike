@@ -508,4 +508,28 @@ class Users implements UserInterface, \Serializable
     {
         return $this->taskusers;
     }
+
+    public function isEnabled()
+        {
+        	// pour bloquer accès si isActive est false dans la BDD
+            return $this->isActive; // si isActive vaut true va retourner true et valider accès à la page pour le user, si isActive vaut false alors renvoie sur login avec message disant account not activated
+        }
+
+        // pour bloquer accès si est false dans la BDD : on set à true car on s'en sert pas
+        public function isAccountNonExpired()
+        {
+            return true;
+        }
+
+        // pour bloquer accès si est false dans la BDD : on set à true car on s'en sert pas
+        public function isAccountNonLocked()
+        {
+            return true;
+        }
+
+        // pour bloquer accès si est false dans la BDD : on set à true car on s'en sert pas
+        public function isCredentialsNonExpired()
+        {
+            return true;
+        }
 }
