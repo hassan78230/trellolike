@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Projects
  *
- * @ORM\Table(name="projects", indexes={@ORM\Index(name="fk_projects_teams_idx", columns={"teams_id"}), @ORM\Index(name="fk_projects_chats1_idx", columns={"chats_id"})})
+ * @ORM\Table(name="projects", indexes={@ORM\Index(name="fk_projects_teams_idx", columns={"teams_id"}), @ORM\Index(name="fk_projects_chats1_idx", columns={"chats_id"}), @ORM\Index(name="fk_projects_creator", columns={"creator_id"})})
  * @ORM\Entity
  */
 class Projects
@@ -52,6 +52,16 @@ class Projects
     * @ORM\OneToMany(targetEntity="Tasks", mappedBy="project")
     */
    private $tasks;
+
+   /**
+    * @var \Users
+    *
+    * @ORM\ManyToOne(targetEntity="Users",inversedBy="projects")
+    * @ORM\JoinColumns({
+    *   @ORM\JoinColumn(name="creator_id", referencedColumnName="id")
+    * })
+    */
+   private $creator;
 
 
    public function __construct()
@@ -175,4 +185,54 @@ class Projects
     {
         return $this->tasks;
     }
+
+    /**
+     * Set team
+     *
+     * @param \AppBundle\Entity\Teams $team
+     *
+     * @return Projects
+     */
+    public function setTeam(\AppBundle\Entity\Teams $team = null)
+    {
+        $this->team = $team;
+
+        return $this;
+    }
+
+    /**
+     * Get team
+     *
+     * @return \AppBundle\Entity\Teams
+     */
+    public function getTeam()
+    {
+        return $this->team;
+    }
+
+    /**
+     * Set creator
+     *
+     * @param \AppBundle\Entity\Users $creator
+     *
+     * @return Projects
+     */
+    public function setCreator(\AppBundle\Entity\Users $creator = null)
+    {
+        $this->creator = $creator;
+
+        return $this;
+    }
+
+    /**
+     * Get creator
+     *
+     * @return \AppBundle\Entity\Users
+     */
+    public function getCreator()
+    {
+        return $this->creator;
+    }
+
+
 }

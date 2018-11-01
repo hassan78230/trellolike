@@ -38,6 +38,7 @@ class ProjectsController extends Controller
         $form = $this->createForm('AppBundle\Form\ProjectsType', $project);
         $form->handleRequest($request);
         $user=$this->getUser();
+        $project->setCreator($user);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $project->getTeams()->addUser($user);

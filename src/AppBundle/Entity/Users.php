@@ -106,6 +106,11 @@ class Users implements UserInterface, \Serializable
       */
    private $taskusers;
 
+   /**
+   * @ORM\OneToMany(targetEntity="Projects", mappedBy="creator")
+   */
+  private $projects;
+
     public function __construct()
     {
         $this->teams = new \Doctrine\Common\Collections\ArrayCollection();
@@ -113,6 +118,7 @@ class Users implements UserInterface, \Serializable
         $this->sendMessages = new \Doctrine\Common\Collections\ArrayCollection();
         $this->tags = new \Doctrine\Common\Collections\ArrayCollection();
         $this->taskusers = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->projects = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     public function getSalt()
@@ -531,5 +537,39 @@ class Users implements UserInterface, \Serializable
         public function isCredentialsNonExpired()
         {
             return true;
+        }
+
+        /**
+         * Add project
+         *
+         * @param \AppBundle\Entity\Projects $project
+         *
+         * @return Users
+         */
+        public function addProject(\AppBundle\Entity\Projects $project)
+        {
+            $this->projects[] = $project;
+
+            return $this;
+        }
+
+        /**
+         * Remove project
+         *
+         * @param \AppBundle\Entity\Projects $project
+         */
+        public function removeProject(\AppBundle\Entity\Projects $project)
+        {
+            $this->projects->removeElement($project);
+        }
+
+        /**
+         * Get projects
+         *
+         * @return \Doctrine\Common\Collections\Collection
+         */
+        public function getProjects()
+        {
+            return $this->projects;
         }
 }
