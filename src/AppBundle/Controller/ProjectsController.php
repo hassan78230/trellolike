@@ -5,6 +5,7 @@ namespace AppBundle\Controller;
 use AppBundle\Entity\Projects;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
+use AppBundle\Entity\Teams;
 
 /**
  * Project controller.
@@ -34,16 +35,21 @@ class ProjectsController extends Controller
      */
     public function newAction(Request $request)
     {
+        $user=$this->getUser();
         $project = new Projects();
+        $team = new Teams();
         $form = $this->createForm('AppBundle\Form\ProjectsType', $project);
         $form->handleRequest($request);
-        $user=$this->getUser();
         $project->setCreator($user);
+        $team->setName($project->getName());
+        $team->addUser($user);
+        $project->setTeams($team);
+
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $project->getTeams()->addUser($user);
             $em = $this->getDoctrine()->getManager();
             $em->persist($project);
+            $em->persist($team);
             $em->flush();
 
             return $this->redirectToRoute('projects_show', array('id' => $project->getId()));

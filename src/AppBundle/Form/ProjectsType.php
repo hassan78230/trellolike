@@ -17,14 +17,14 @@ class ProjectsType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder->add('name');
-        $builder->add('teams', EntityType::class, [  'class' => Teams::class,
-        	'multiple' => false, // permet de faire des choix multiples, cocher plusieurs
-            'expanded' =>true, // passer les input en checkbox (beau)
-            'choice_label' => 'name', // afficher category.name devant chaque checkbox
-
-            // si on cherche à lier la table dominée à la dominante (au sens des jointures) - Pour enregistrer relation dans le sens inverse (lier des produits à des catégories car catégories est table dominante (possède annotation inversed by)) rajouter ligne suivante
-            'by_reference' => true
-       	]);
+        // $builder->add('teams', EntityType::class, [  'class' => Teams::class,
+        // 	'multiple' => false, // permet de faire des choix multiples, cocher plusieurs
+        //     'expanded' =>true, // passer les input en checkbox (beau)
+        //     'choice_label' => 'name', // afficher category.name devant chaque checkbox
+        //
+        //     // si on cherche à lier la table dominée à la dominante (au sens des jointures) - Pour enregistrer relation dans le sens inverse (lier des produits à des catégories car catégories est table dominante (possède annotation inversed by)) rajouter ligne suivante
+        //     'by_reference' => true
+       	// ]);
     }
 
     /**
